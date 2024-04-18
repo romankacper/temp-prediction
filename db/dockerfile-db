@@ -1,0 +1,8 @@
+FROM mysql:latest
+ENV MYSQL_ROOT_PASSWORD root
+COPY ./Train.csv /docker-entrypoint-initdb.d/
+COPY ./Test.csv /docker-entrypoint-initdb.d/
+COPY ./init.sql /docker-entrypoint-initdb.d/
+
+
+
