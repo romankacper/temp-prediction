@@ -1,0 +1,8 @@
+docker
+streamlit
+pandas
+numpy
+tensorflow
+sqlalchemy
+pymysql
+cryptography
