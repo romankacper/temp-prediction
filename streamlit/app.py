@@ -65,6 +65,24 @@ if uploaded_file_1 is not None:
     if len(uploaded_test) < 16:
         st.error('Plik zawiera mniej niż 16 wierszy. Proszę przesłać inny plik.')
         st.stop()
+ 
+    # sprawdź, czy dane mieszczą się w odpowiednim zakresie
+    stats = uploaded_test.describe()
+    if not (stats.loc['min', 'meantemp'] >= 6 and stats.loc['max', 'meantemp'] <= 39):
+        st.error('Wartości meantemp są poza zakresem 6-39. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'humidity'] >= 13 and stats.loc['max', 'humidity'] <= 100):
+        st.error('Wartości humidity są poza zakresem 13-100. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'wind_speed'] >= 0 and stats.loc['max', 'wind_speed'] <= 43):
+        st.error('Wartości wind_speed są poza zakresem 0-43. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'meanpressure'] >= 870 and stats.loc['max', 'meanpressure'] <= 1086):
+        st.error('Wartości meanpressure są poza zakresem 870-1086. Proszę przesłać inny plik.')
+        st.stop()
     
     #uploaded_test.to_csv('/app/uploaded/uploaded1.csv', index=False)
     uploaded_test.to_sql('test', con=engine, if_exists='replace', index=False)
@@ -84,6 +102,24 @@ if uploaded_file_2 is not None:
     # sprawdź, czy ramka danych zawiera co najmniej 16 wierszy
     if len(uploaded_train) < 16:
         st.error('Plik zawiera mniej niż 16 wierszy. Proszę przesłać inny plik.')
+        st.stop()
+
+    # sprawdź, czy dane mieszczą się w odpowiednim zakresie
+    stats = uploaded_train.describe()
+    if not (stats.loc['min', 'meantemp'] >= 6 and stats.loc['max', 'meantemp'] <= 39):
+        st.error('Wartości meantemp są poza zakresem 6-39. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'humidity'] >= 13 and stats.loc['max', 'humidity'] <= 100):
+        st.error('Wartości humidity są poza zakresem 13-100. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'wind_speed'] >= 0 and stats.loc['max', 'wind_speed'] <= 43):
+        st.error('Wartości wind_speed są poza zakresem 0-43. Proszę przesłać inny plik.')
+        st.stop()
+
+    if not (stats.loc['min', 'meanpressure'] >= 870 and stats.loc['max', 'meanpressure'] <= 1086):
+        st.error('Wartości meanpressure są poza zakresem 870-1086. Proszę przesłać inny plik.')
         st.stop()
     
     #uploaded_test.to_csv('/app/uploaded/uploaded1.csv', index=False)

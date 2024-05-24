@@ -1,9 +1,3 @@
-CREATE TABLE test_table (
-  test_column varchar(255)
-);
-INSERT INTO test_table (test_column) VALUES ('Hello, world!');
-
-
 CREATE TABLE train (
   date varchar(10),
   meantemp double,
@@ -20,14 +14,14 @@ CREATE TABLE test (
   meanpressure double
 );
 
-LOAD DATA INFILE '/docker-entrypoint-initdb.d/Train.csv' 
+LOAD DATA INFILE '/docker-entrypoint-initdb.d/0_Train.csv' 
 INTO TABLE train 
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n' 
 IGNORE 1 ROWS;
 SHOW WARNINGS;
 
-LOAD DATA INFILE '/docker-entrypoint-initdb.d/Test.csv' 
+LOAD DATA INFILE '/docker-entrypoint-initdb.d/1_Test.csv' 
 INTO TABLE test 
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n' 

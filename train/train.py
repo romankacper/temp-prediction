@@ -15,6 +15,7 @@ from tensorflow.keras.optimizers import SGD
 from keras import regularizers
 from keras.layers import Dense, LSTM, Dropout
 from sqlalchemy import create_engine
+from tensorflow.keras.models import load_model
 
 
 def normalize(data, column_names, mean_columns, std_columns):
@@ -103,28 +104,31 @@ train_dataset = make_dataset(df_train, column_names, sequence_length, output_len
 val_dataset = make_dataset(df_val, column_names, sequence_length, output_length)
 test_dataset = make_dataset(df_test, column_names, sequence_length, output_length)
 
-# Budowanie modelu
-model_lstm = Sequential()
-model_lstm.add(LSTM(32, return_sequences=True, kernel_regularizer=regularizers.l2(0.001), recurrent_dropout=0.001))
-model_lstm.add(Dropout(0.05))
-model_lstm.add(LSTM(32, kernel_regularizer=regularizers.l2(0.001), recurrent_dropout=0.001))
-model_lstm.add(Dropout(0.05))
-model_lstm.add(Dense(1))
+print(len(df_test))
+if len(df_test)==114 or len(df)!=1462:
+    # Budowanie modelu
+    model_lstm = Sequential()
+    model_lstm.add(LSTM(32, return_sequences=True, kernel_regularizer=regularizers.l2(0.001), recurrent_dropout=0.001))
+    model_lstm.add(Dropout(0.05))
+    model_lstm.add(LSTM(32, kernel_regularizer=regularizers.l2(0.001), recurrent_dropout=0.001))
+    model_lstm.add(Dropout(0.05))
+    model_lstm.add(Dense(1))
 
-# Kompilacja modelu
-model_lstm.compile(optimizer=SGD(), loss='mse', metrics=['mae'])
+    # Kompilacja modelu
+    model_lstm.compile(optimizer=SGD(), loss='mse', metrics=['mae'])
 
-# Trenowanie modelu
-history_lstm = model_lstm.fit(train_dataset, epochs=1000, validation_data=val_dataset)
+    # Trenowanie modelu
+    history_lstm = model_lstm.fit(train_dataset, epochs=1000, validation_data=val_dataset)
 
-# Zapisanie modelu do pliku
-model_lstm.save('/app/models/model_lstm.keras')
+    # Zapisanie modelu do pliku
+    model_lstm.save('/app/models/model_lstm.keras')
 
-# Ewaluacja modelu
-test_mae_lstm = model_lstm.evaluate(test_dataset)[1]
-print(f"Test MAE: {test_mae_lstm:.2f}")
+    # Ewaluacja modelu
+    test_mae_lstm = model_lstm.evaluate(test_dataset)[1]
+    print(f"Test MAE: {test_mae_lstm:.2f}")
 
-predictions = model_lstm.predict(test_dataset).flatten()
+model = load_model('/app/models/model_lstm.keras')
+predictions = model.predict(test_dataset).flatten()
 
 df_real = pd.DataFrame({
     'Date': df_test['date'],

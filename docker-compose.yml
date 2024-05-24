@@ -12,7 +12,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: always
-    command: --secure-file-priv=""
+    command: --secure-file-priv=/docker-entrypoint-initdb.d/
   train:
     build: 
       context: ./train
