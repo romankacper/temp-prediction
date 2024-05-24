@@ -22,17 +22,14 @@ def normalize(data, column_names, mean_columns, std_columns):
     def normalize(x, center, scale):
         return (x - center) / scale
 
-    # Inicjalizacja pustej listy do przechowywania znormalizowanych danych
     normalized_data = []
 
-    # Iteracja przez każdą sekwencję w danych
     for sequence in data:
         sequence = pd.DataFrame(sequence, columns=column_names)
         for col in column_names:
             sequence[col] = normalize(sequence[col], mean_columns[col], std_columns[col])
         normalized_data.append(sequence.values)
-
-    # Konwersja znormalizowanych danych z powrotem na tablicę numpy
+        
     normalized_data = np.array(normalized_data)
 
     return normalized_data
@@ -40,22 +37,17 @@ def normalize(data, column_names, mean_columns, std_columns):
 
 def make_dataset(df, column_names, sequence_length, output_length ):
     data = df[column_names].values
-    # print(data)
-    # Inicjalizujemy listy dla naszych wejść i wyjść
     inputs = []
     targets = []
     
-    # Tworzymy nasze wejścia i wyjścia
     for i in range(len(data) - sequence_length - output_length + 1):
         inputs.append(data[i:i+sequence_length])
         targets.append(data[i+sequence_length:i+sequence_length+output_length, 0])
     
-    # Konwertujemy listy do tablic numpy
     inputs = np.array(inputs)
     targets = np.array(targets).round(2)
     
     normalized_inputs = normalize(inputs, column_names, mean_columns, std_columns)
-    # Tworzymy nasz zestaw danych
     # Dodajemy dodatkowy wymiar do naszych danych wejściowych i wyjściowych
     normalized_inputs = normalized_inputs[None, :]
     targets = targets[None, :]
@@ -104,7 +96,7 @@ train_dataset = make_dataset(df_train, column_names, sequence_length, output_len
 val_dataset = make_dataset(df_val, column_names, sequence_length, output_length)
 test_dataset = make_dataset(df_test, column_names, sequence_length, output_length)
 
-print(len(df_test))
+#warunek dodany w celu rozróżnienia czy został wprowadzony nowy plik jako dane testowe lub treningowe
 if len(df_test)==114 or len(df)!=1462:
     # Budowanie modelu
     model_lstm = Sequential()
