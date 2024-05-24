@@ -53,7 +53,6 @@ flag_2 = 0
 uploaded_file_1 = st.file_uploader("Załącz plik csv, na którym mam wykonać predykcję", type=['csv', 'xlsx'])
 
 if uploaded_file_1 is not None:
-    # Możesz teraz użyć przesłanego pliku, na przykład wczytując go do ramki danych pandas
     uploaded_test = pd.read_csv(uploaded_file_1)
     # sprawdź, czy ramka danych zawiera wymagane kolumny
     required_columns = ['date', 'meantemp', 'humidity', 'wind_speed', 'meanpressure']
@@ -84,14 +83,12 @@ if uploaded_file_1 is not None:
         st.error('Wartości meanpressure są poza zakresem 870-1086. Proszę przesłać inny plik.')
         st.stop()
     
-    #uploaded_test.to_csv('/app/uploaded/uploaded1.csv', index=False)
     uploaded_test.to_sql('test', con=engine, if_exists='replace', index=False)
     flag_1 = 1
 
 uploaded_file_2 = st.file_uploader("Załącz plik csv, na którym mam trenować model", type=['csv', 'xlsx'])
 
 if uploaded_file_2 is not None:
-    # Możesz teraz użyć przesłanego pliku, na przykład wczytując go do ramki danych pandas
     uploaded_train = pd.read_csv(uploaded_file_2)
     # sprawdź, czy ramka danych zawiera wymagane kolumny
     required_columns = ['date', 'meantemp', 'humidity', 'wind_speed', 'meanpressure']
@@ -122,7 +119,6 @@ if uploaded_file_2 is not None:
         st.error('Wartości meanpressure są poza zakresem 870-1086. Proszę przesłać inny plik.')
         st.stop()
     
-    #uploaded_test.to_csv('/app/uploaded/uploaded1.csv', index=False)
     uploaded_train.to_sql('train', con=engine, if_exists='replace', index=False)
     flag_2 = 1
 
