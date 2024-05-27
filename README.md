@@ -8,6 +8,6 @@ Wymagane zainstalowane lokalnie środowisko Dockera i narzędzie Docker Compose.
 
 ## Jak używać
 W wierszu poleceń przejść do katalogu projektu i wywołać polecenia:
-verbatimem docker-compose build
-verbatimem docker-compose up
+`docker-compose build`
+`docker-compose up`
 System zostanie uruchomiony przez Dockera i zostanie wskazany adres, pod którym działa aplikacja internetowa.
