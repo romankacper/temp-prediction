@@ -1,0 +1,8 @@
+# Dockerfile-train
+FROM python:3.8
+WORKDIR /app
+COPY . /app
+RUN apt-get update && apt-get install -y libhdf5-dev
+RUN pip install --no-binary h5py h5py
+RUN pip install -r requirements.txt
+CMD ["python", "train.py"]
