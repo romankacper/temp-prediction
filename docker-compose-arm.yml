@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    build: 
+      context: ./db
+      dockerfile: dockerfile-db
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    command: --secure-file-priv=/docker-entrypoint-initdb.d/
+  train:
+    build: 
+      context: ./train
+      dockerfile: dockerfile-train-arm
+    volumes:
+      - model_data:/app/models
+      - prediction_data:/app/predictions
+      - uploaded_data:/app/uploaded
+    depends_on: 
+      - db
+    restart: on-failure
+  streamlit:
+    build: 
+      context: ./streamlit
+      dockerfile: dockerfile-streamlit-arm
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - model_data:/app/models
+      - prediction_data:/app/predictions
+      - uploaded_data:/app/uploaded
+    depends_on: 
+      - train
+    ports:
+      - "8501:8501"
+    restart: always
+volumes:
+  db_data: {}
+  model_data: {}
+  prediction_data: {}
+  uploaded_data: {}
